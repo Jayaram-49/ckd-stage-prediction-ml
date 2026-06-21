@@ -1,6 +1,6 @@
-# Chronic Kidney Disease (CKD) AI Platform - Project Report
+# Chronic Kidney Disease (CKD) Using Ml - Project Report
 
-An end-to-end clinical decision support platform designed to predict, track, and explain Chronic Kidney Disease progression using Artificial Intelligence.
+An end-to-end clinical decision support platform designed to predict, track, and explain Chronic Kidney Disease Stage Prediction using Machine Learning.
 
 ---
 
@@ -26,9 +26,9 @@ graph TD
 ### A. Machine Learning Service (`ml`)
 The ML component is responsible for analyzing clinical parameters, classifying the severity stage, estimating disease progression risks, and explaining model predictions.
 
-* **ML Model**: Uses a **Multi-Layer Perceptron (MLP) Artificial Neural Network** (or Random Forest depending on configuration) trained on clinical datasets.
+* **ML Model**: Uses a **Random Forest Classifier** optimized through hyperparameter tuning with `GridSearchCV` trained on clinical datasets.
   * **Input Parameters (24 Features)**: Includes age, blood pressure, specific gravity, albumin, sugar, red blood cells, pus cell, pus cell clumps, bacteria, blood glucose random, blood urea, serum creatinine, sodium, potassium, hemoglobin, packed cell volume, white blood cell count, red blood cell count, hypertension, diabetes mellitus, coronary artery disease, appetite, peda edema, and anemia.
-* **Explainability (SHAP)**: Uses *SHapley Additive exPlanations* to calculate the positive or negative contribution of each patient feature toward their CKD risk score.
+* **Explainability (SHAP)**: Uses *SHapley Additive exPlanations* (specifically `KernelExplainer` based on training samples) to calculate the positive or negative contribution of each patient feature toward their CKD risk score.
 * **Model Retraining**: Built-in `/retrain` background worker that executes hyperparameter tuning and model packaging on demand when new patient records are registered.
 
 ### B. Spring Boot Backend (`backend`)
@@ -37,10 +37,10 @@ Responsible for data security, business rules, and service integration.
 * **Database Access**: Uses Hibernate/Spring Data JPA to interact with MySQL.
 * **Dual-Mode Clinical Chatbot**: A smart virtual assistant with two knowledge bases:
   * **Patient Mode**: Focuses on diet restrictions (potassium, sodium limits), explaining symptoms (proteinuria/foamy urine, edema), and clarifying eGFR/ACR test reports.
-  * **Doctor Mode**: Focuses on the math behind the MLP layers, SHAP calculations, and KDIGO (Kidney Disease: Improving Global Outcomes) staging standards.
+  * **Doctor Mode**: Focuses on explainable Random Forest decision boundaries, SHAP calculations, and KDIGO (Kidney Disease: Improving Global Outcomes) staging standards.
 * **Direct Messaging System**: Allows secure, cross-portal chat logs between patients and doctors.
 
-### C. React Frontend (`frontend/frontend`)
+### C. React Frontend (`frontend`)
 Constructed with role-based dashboard views:
 
 | Portal | Core Features |
